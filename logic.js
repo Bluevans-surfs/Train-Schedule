@@ -45,12 +45,13 @@ database.ref().push(newTrain);
 
  //Clears all of the text boxes
  $("#train-name-input").val("");
- $("#destination-name-input").val("");
- $("#firsttraintime-name-input").val("");
- $("#frequency-name-input-input");
+ $("#destination-input").val("");
+ $("#first-train-time-input").val("");
+ $("#frequency-input").val("");
 });
 
 // 3. Create Firebase event for adding trains to the database and a row in the html when a user adds an entry
+// Child added loops the data for each entry
 database.ref().on("child_added", function(childSnapshot, prevChildKey) {
 
   console.log(childSnapshot.val());
@@ -67,26 +68,31 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   console.log(firstTrainTime);
   // console.log(frequency);
 
+  var tableRowData = $("<tr>");
+  var tableData = $("<td>" + trainName + "</td><td>" + destination + "</td><td>" + firstTrainTime + "</td><td>" + frequency + "</td>");
 
+// Append means attach.  Attaching tableData to tableRowData
+  tableRowData.append(tableData);
+  $("tbody").append(tableRowData);
 
-
+});
 
 // Prettify the employee start
-  var empStartPretty = moment.unix(empStart).format("MM/DD/YY");
+//   var empStartPretty = moment.unix(empStart).format("MM/DD/YY");
 
-  // Calculate the months worked using hardcore math
-  // To calculate the months worked
-  var empMonths = moment().diff(moment.unix(empStart, "X"), "months");
-  console.log(empMonths);
+//   // Calculate the months worked using hardcore math
+//   // To calculate the months worked
+//   var empMonths = moment().diff(moment.unix(empStart, "X"), "months");
+//   console.log(empMonths);
 
-  // Calculate the total billed rate
-  var empBilled = empMonths * empRate;
-  console.log(empBilled);
+//   // Calculate the total billed rate
+//   var empBilled = empMonths * empRate;
+//   console.log(empBilled);
 
-  // Add each train's data into the table
-  $("#employee-table > tbody").append("<tr><td>" + empName + "</td><td>" + empRole + "</td><td>" +
-  empStartPretty + "</td><td>" + empMonths + "</td><td>" + empRate + "</td><td>" + empBilled + "</td></tr>");
-});
+//   // Add each train's data into the table
+//   $("#employee-table > tbody").append("<tr><td>" + empName + "</td><td>" + empRole + "</td><td>" +
+//   empStartPretty + "</td><td>" + empMonths + "</td><td>" + empRate + "</td><td>" + empBilled + "</td></tr>");
+// });
 
 
 
