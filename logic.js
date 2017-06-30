@@ -23,13 +23,14 @@ var destination = $("#destination-input").val().trim();
 var firstTrainTime = $("#first-train-time-input").val().trim();
 var frequency = $("#frequency-input").val().trim();
 
+
 // Creates local "temporary" object for holding train data
 var newTrain = {
   name: trainName,
   destLocation: destination,
   timeFirst: firstTrainTime,
   howOften: frequency
-};
+  };
 
 // Uploads train data to the database
 database.ref().push(newTrain);
@@ -69,13 +70,43 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
   // console.log(frequency);
 
   var tableRowData = $("<tr>");
-  var tableData = $("<td>" + trainName + "</td><td>" + destination + "</td><td>" + firstTrainTime + "</td><td>" + frequency + "</td>");
+  var tableData = $("<td>" + trainName + "</td><td>" + destination + "</td><td>" + firstTrainTime + "</td><td>" + frequency + "</td><td>" + getNextTrainTime(firstTrainTime, frequency) + "</td>");
+
+
+//+ minutesAway + "</td>");
 
 // Append means attach.  Attaching tableData to tableRowData
   tableRowData.append(tableData);
   $("tbody").append(tableRowData);
 
 });
+
+
+
+// alert( getNextTrainTime("05:07", 42) )
+
+function getNextTrainTime(firstTrainTime, frequency) {
+
+  var hr = moment(firstTrainTime,"HH:mm").hour();
+
+  var min = moment(firstTrainTime,"HH:mm").minute();
+
+  var currentTime = moment().hour(hr).minutes(min);
+  
+  do {
+    currentTime.add(frequency, 'minutes');
+  } while (currentTime < moment())
+
+//alert( "The next arrival time will be: " + currentTime.format('HH:mm'));
+return currentTime.format('HH:mm');
+}
+
+// function minutesAway {
+
+
+
+// }
+
 
 // Prettify the employee start
 //   var empStartPretty = moment.unix(empStart).format("MM/DD/YY");
